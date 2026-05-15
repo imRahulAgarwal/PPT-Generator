@@ -1,6 +1,7 @@
 "use client";
 
 import { Job } from "@/types/job";
+import Link from "next/link";
 
 interface JobStatusCardProps {
 	job: Job | null;
@@ -18,23 +19,26 @@ export default function JobStatusCard({ job, pollError }: JobStatusCardProps) {
 	if (!job) return null;
 
 	return (
-		<div className="status-card">
-			<p className="status-label">{statusLabel[job.status] ?? "Checking status..."}</p>
+		<div className="bg-foreground border border-border rounded-lg p-6 flex flex-col items-center gap-4 text-center">
+			<p className="text-sm text-secondary">{statusLabel[job.status] ?? "Checking status..."}</p>
 
-			{/* Show spinner while job is in progress */}
+			{/* Spinner while pending or processing */}
 			{(job.status === "pending" || job.status === "processing") && (
-				<div className="spinner" aria-label="Loading" />
+				<div className="w-7 h-7 rounded-full border-[3px] border-vorder border-t-accent animate-spin" />
 			)}
 
 			{job.status === "done" && job.downloadUrl && (
-				<a href={job.downloadUrl} download className="download-btn">
+				<Link
+					href={job.downloadUrl}
+					download
+					className="bg-accent hover:bg-accent-hover text-white rounded-lg px-5 py-2.5 text-sm transition-colors">
 					Download PPT
-				</a>
+				</Link>
 			)}
 
-			{job.status === "failed" && <p className="error-text">{job.error ?? "Something went wrong."}</p>}
+			{job.status === "failed" && <p className="text-sm text-error">{job.error ?? "Something went wrong."}</p>}
 
-			{pollError && <p className="error-text">{pollError}</p>}
+			{pollError && <p className="text-sm text-error">{pollError}</p>}
 		</div>
 	);
 }

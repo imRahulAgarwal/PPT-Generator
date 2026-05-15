@@ -1,220 +1,49 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500&display=swap");
 @import "tailwindcss";
 
-/* Light theme tokens */
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-border: var(--border);
+	--color-primary: var(--primary);
+	--color-secondary: var(--secondary);
+	--color-accent: var(--accent);
+	--color-accent-hover: var(--accent-hover);
+	--color-error: var(--error);
+	--font-display: var(--font-display);
+	--font-body: var(--font-body);
+}
+
 :root {
-	--bg: #f5f3ee;
-	--surface: #ffffff;
+	--background: #f5f3ee;
+	--foreground: #ffffff;
 	--border: #ddd8ce;
-	--text-primary: #1a1714;
-	--text-secondary: #6b6560;
+	--primary: #1a1714;
+	--secondary: #6b6560;
 	--accent: #c45c26;
 	--accent-hover: #a84d1f;
 	--error: #b91c1c;
-	--radius: 8px;
+
 	--font-display: "Playfair Display", Georgia, serif;
 	--font-body: "DM Sans", sans-serif;
 }
 
-/* Dark theme tokens — applied via data-theme="dark" set by next-themes */
-[data-theme="dark"] {
-	--bg: #18160f;
-	--surface: #221f17;
+.dark {
+	--background: #18160f;
+	--foreground: #221f17;
 	--border: #3a3529;
-	--text-primary: #f0ece2;
-	--text-secondary: #9e9788;
+	--primary: #f0ece2;
+	--secondary: #9e9788;
 	--accent: #e07848;
 	--accent-hover: #c86030;
 }
 
 * {
 	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
 }
 
-body {
-	background-color: var(--bg);
-	color: var(--text-primary);
-	font-family: var(--font-body);
-	transition:
-		background-color 0.2s,
-		color 0.2s;
-}
-
-/* ── Layout ── */
-.page-shell {
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	padding: 3rem 1.5rem;
-}
-
-.page-header {
-	width: 100%;
-	max-width: 560px;
-	display: flex;
-	justify-content: space-between;
-	align-items: baseline;
-	margin-bottom: 2.5rem;
-}
-
-.page-title {
-	font-family: var(--font-display);
-	font-size: 1.75rem;
-	color: var(--text-primary);
-}
-
-.page-subtitle {
-	font-size: 0.875rem;
-	color: var(--text-secondary);
-	margin-top: 0.25rem;
-}
-
-/* ── Theme toggle ── */
-.theme-toggle {
-	font-size: 0.8rem;
-	font-family: var(--font-body);
-	color: var(--text-secondary);
-	background: none;
-	border: 1px solid var(--border);
-	border-radius: var(--radius);
-	padding: 0.3rem 0.75rem;
-	cursor: pointer;
-	transition:
-		color 0.15s,
-		border-color 0.15s;
-}
-.theme-toggle:hover {
-	color: var(--text-primary);
-	border-color: var(--text-secondary);
-}
-
-/* ── Form ── */
-.form-wrapper {
-	width: 100%;
-	max-width: 560px;
-	display: flex;
-	flex-direction: column;
-	gap: 1.5rem;
-}
-
-.ppt-form {
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: var(--radius);
-	padding: 2rem;
-	display: flex;
-	flex-direction: column;
-	gap: 1.25rem;
-}
-
-.field-group {
-	display: flex;
-	flex-direction: column;
-	gap: 0.4rem;
-}
-
-.field-group label {
-	font-size: 0.875rem;
-	font-weight: 500;
-	color: var(--text-secondary);
-	letter-spacing: 0.02em;
-}
-
-.field-group input,
-.field-group select {
-	background: var(--bg);
-	color: var(--text-primary);
-	border: 1px solid var(--border);
-	border-radius: var(--radius);
-	padding: 0.6rem 0.85rem;
-	font-size: 0.95rem;
-	font-family: var(--font-body);
-	outline: none;
-	transition: border-color 0.15s;
-}
-.field-group input:focus,
-.field-group select:focus {
-	border-color: var(--accent);
-}
-
-.field-error {
-	font-size: 0.8rem;
-	color: var(--error);
-}
-
-.error-text {
-	font-size: 0.85rem;
-	color: var(--error);
-}
-
-.submit-btn {
-	margin-top: 0.5rem;
-	background: var(--accent);
-	color: #fff;
-	border: none;
-	border-radius: var(--radius);
-	padding: 0.75rem 1.25rem;
-	font-size: 0.95rem;
-	font-family: var(--font-body);
-	font-weight: 500;
-	cursor: pointer;
-	transition: background 0.15s;
-}
-.submit-btn:hover:not(:disabled) {
-	background: var(--accent-hover);
-}
-.submit-btn:disabled {
-	opacity: 0.6;
-	cursor: not-allowed;
-}
-
-/* ── Status card ── */
-.status-card {
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: var(--radius);
-	padding: 1.5rem;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 1rem;
-	text-align: center;
-}
-
-.status-label {
-	font-size: 0.95rem;
-	color: var(--text-secondary);
-}
-
-/* Simple CSS spinner */
-.spinner {
-	width: 28px;
-	height: 28px;
-	border: 3px solid var(--border);
-	border-top-color: var(--accent);
-	border-radius: 50%;
-	animation: spin 0.8s linear infinite;
-}
-@keyframes spin {
-	to {
-		transform: rotate(360deg);
+@layer base {
+	body {
+		@apply bg-background text-primary font-body transition-colors duration-200;
 	}
-}
-
-.download-btn {
-	background: var(--accent);
-	color: #fff;
-	text-decoration: none;
-	border-radius: var(--radius);
-	padding: 0.65rem 1.25rem;
-	font-size: 0.9rem;
-	font-family: var(--font-body);
-	font-weight: 500;
-	transition: background 0.15s;
-}
-.download-btn:hover {
-	background: var(--accent-hover);
 }

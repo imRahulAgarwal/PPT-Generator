@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import jobRoutes from "./routes/jobRoutes.js";
-import metricsRoutes from "./routes/metricsRoutes.js";
+import metricsRoutes from "./routes/metricRoutes.js";
 import morganMiddleware, { addTraceId } from "./middlewares/morganMiddleware.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 import initDb from "./utils/initDb.js";

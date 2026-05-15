@@ -3,7 +3,7 @@ import "@/app/globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
-	title: "SlideForge — PPT Generator for Teachers",
+	title: "PPT Generator",
 	description: "Generate classroom presentations in seconds.",
 };
 

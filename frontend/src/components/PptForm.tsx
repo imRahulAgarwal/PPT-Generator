@@ -51,18 +51,37 @@ export default function PptForm() {
 		}
 	};
 
+	const inputClass =
+		"bg-background text-primary border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-accent transition-colors w-full";
+
 	return (
-		<div className="form-wrapper">
-			<form onSubmit={handleSubmit(onSubmit)} className="ppt-form" noValidate>
-				<div className="field-group">
-					<label htmlFor="topic">Topic</label>
-					<input id="topic" type="text" placeholder="e.g. Photosynthesis" {...register("topic")} />
-					{errors.topic && <span className="field-error">{errors.topic.message}</span>}
+		<div className="flex flex-col gap-6 w-full">
+			{/* Form card */}
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				noValidate
+				className="bg-foreground border border-border rounded-lg p-6 flex flex-col gap-5">
+				{/* Topic */}
+				<div className="flex flex-col gap-1.5">
+					<label htmlFor="topic" className="text-xs font-medium text-secondary uppercase tracking-wide">
+						Topic
+					</label>
+					<input
+						id="topic"
+						type="text"
+						placeholder="e.g. Photosynthesis"
+						className={inputClass}
+						{...register("topic")}
+					/>
+					{errors.topic && <span className="text-xs text-error">{errors.topic.message}</span>}
 				</div>
 
-				<div className="field-group">
-					<label htmlFor="grade">Grade Level</label>
-					<select id="grade" {...register("grade")}>
+				{/* Grade */}
+				<div className="flex flex-col gap-1.5">
+					<label htmlFor="grade" className="text-xs font-medium text-secondary uppercase tracking-wide">
+						Grade Level
+					</label>
+					<select id="grade" className={inputClass} {...register("grade")}>
 						<option value="">Select a grade</option>
 						{GRADE_OPTIONS.map((grade) => (
 							<option key={grade} value={grade}>
@@ -70,24 +89,35 @@ export default function PptForm() {
 							</option>
 						))}
 					</select>
-					{errors.grade && <span className="field-error">{errors.grade.message}</span>}
+					{errors.grade && <span className="text-xs text-error">{errors.grade.message}</span>}
 				</div>
 
-				<div className="field-group">
-					<label htmlFor="numberOfSlides">Number of Slides</label>
+				{/* Number of slides */}
+				<div className="flex flex-col gap-1.5">
+					<label
+						htmlFor="numberOfSlides"
+						className="text-xs font-medium text-secondary uppercase tracking-wide">
+						Number of Slides
+					</label>
 					<input
 						id="numberOfSlides"
 						type="number"
 						min={3}
 						max={30}
+						className={inputClass}
 						{...register("numberOfSlides", { valueAsNumber: true })}
 					/>
-					{errors.numberOfSlides && <span className="field-error">{errors.numberOfSlides.message}</span>}
+					{errors.numberOfSlides && (
+						<span className="text-xs text-error">{errors.numberOfSlides.message}</span>
+					)}
 				</div>
 
-				{submitError && <p className="error-text">{submitError}</p>}
+				{submitError && <p className="text-sm text-error">{submitError}</p>}
 
-				<button type="submit" disabled={isSubmitting} className="submit-btn">
+				<button
+					type="submit"
+					disabled={isSubmitting}
+					className="mt-1 bg-accent hover:bg-accent-hover disabled:opacity-60 disabled:cursor-not-allowed text-white rounded-lg px-5 py-2.5 text-sm font-medium transition-colors cursor-pointer">
 					{isSubmitting ? "Submitting..." : "Generate Presentation"}
 				</button>
 			</form>

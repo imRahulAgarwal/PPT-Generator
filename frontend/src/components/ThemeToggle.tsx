@@ -14,7 +14,10 @@ export default function ThemeToggle() {
 	const isDark = theme === "dark";
 
 	return (
-		<button onClick={() => setTheme(isDark ? "light" : "dark")} className="theme-toggle" aria-label="Toggle theme">
+		<button
+			onClick={() => setTheme(isDark ? "light" : "dark")}
+			className="text-xs text-secondary hover:text-primary border border-border hover:border-secondary rounded-lg px-3 py-1.5 bg-transparent transition-colors cursor-pointer"
+			aria-label="Toggle theme">
 			{isDark ? "☀ Light" : "☾ Dark"}
 		</button>
 	);

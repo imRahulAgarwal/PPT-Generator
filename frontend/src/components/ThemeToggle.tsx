@@ -1,0 +1,21 @@
+"use client";
+
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+
+export default function ThemeToggle() {
+	const { theme, setTheme } = useTheme();
+	// Avoid hydration mismatch by only rendering after mount
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => setMounted(true), []);
+	if (!mounted) return null;
+
+	const isDark = theme === "dark";
+
+	return (
+		<button onClick={() => setTheme(isDark ? "light" : "dark")} className="theme-toggle" aria-label="Toggle theme">
+			{isDark ? "☀ Light" : "☾ Dark"}
+		</button>
+	);
+}

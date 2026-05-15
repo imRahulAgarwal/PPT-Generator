@@ -2,7 +2,7 @@ import "dotenv/config";
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { GetObjectCommand } from "@aws-sdk/client-s3";
+import { GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { createReadStream } from "fs";
 
 class StorageService {
@@ -39,6 +39,12 @@ class StorageService {
 	async getPresignedUrl(s3Key) {
 		const command = new GetObjectCommand({ Bucket: this.bucket, Key: s3Key });
 		return await getSignedUrl(this.s3, command, { expiresIn: this.presignedUrlExpiry });
+	}
+
+	// Deletes an object from S3 by key
+	async deleteFile(s3Key) {
+		const command = new DeleteObjectCommand({ Bucket: this.bucket, Key: s3Key });
+		await this.s3.send(command);
 	}
 }
 

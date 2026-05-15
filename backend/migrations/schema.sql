@@ -3,15 +3,19 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 -- Stores each PPT generation request and its current status
 CREATE TABLE IF NOT EXISTS jobs (
-  id              UUID PRIMARY KEY,
-  topic           TEXT NOT NULL,
-  grade           TEXT NOT NULL,
-  number_of_slides INTEGER NOT NULL,
-  status          TEXT NOT NULL DEFAULT 'pending', -- pending | processing | done | failed
-  s3_key          TEXT,
-  error_message   TEXT,
-  created_at      TIMESTAMPTZ NOT NULL,
-  updated_at      TIMESTAMPTZ NOT NULL
+  id                                  UUID PRIMARY KEY,
+  topic                               TEXT NOT NULL,
+  grade                               TEXT NOT NULL,
+  number_of_slides                    INTEGER NOT NULL,
+  status                              TEXT NOT NULL DEFAULT 'pending',
+  s3_key                              TEXT,
+  error_message                       TEXT,
+  served_from_cache                   BOOLEAN DEFAULT FALSE,
+  completed_at                        TIMESTAMPTZ,
+  is_file_deleted_from_cloud_storage  BOOLEAN DEFAULT FALSE,
+  deleted_at                          TIMESTAMPTZ,
+  created_at                          TIMESTAMPTZ NOT NULL,
+  updated_at                          TIMESTAMPTZ NOT NULL
 );
 
 -- Stores embeddings and their generated slide JSON for semantic cache lookups

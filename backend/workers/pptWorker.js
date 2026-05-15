@@ -60,6 +60,7 @@ const processJob = async (job) => {
 		const cacheKey = `${topic} grade ${grade} ${numberOfSlides} slides`;
 		const embedding = await embeddingService.getEmbedding(cacheKey);
 
+		let isServedFromCache = false; // tracks whether this job was served from cache
 		let slideContent = await checkSemanticCache(embedding);
 
 		if (!slideContent) {
@@ -86,6 +87,7 @@ const processJob = async (job) => {
 
 			logger.info("CACHE_SAVED", "Slide content saved to semantic cache", { jobId });
 		} else {
+			isServedFromCache = true;
 			// Cache hit — slide_content is stored as a JSON string in DB
 			slideContent = typeof slideContent === "string" ? JSON.parse(slideContent) : slideContent;
 			logger.info("CACHE_HIT", "Slide content served from semantic cache", { jobId });
@@ -110,7 +112,12 @@ const processJob = async (job) => {
 		const uploadDurationMs = Number(process.hrtime.bigint() - uploadStart) / 1_000_000;
 		logger.success("PPT_UPLOADED", "PPTX file uploaded to S3", { jobId, s3Key }, uploadDurationMs);
 
-		await updateJobStatus(jobId, { status: "done", s3Key });
+		await updateJobStatus(jobId, {
+			status: "done",
+			s3Key,
+			servedFromCache: isServedFromCache,
+			completedAt: new Date(),
+		});
 		logger.success("JOB_DONE", "Job completed successfully", { jobId });
 	} catch (err) {
 		logger.error("JOB_FAILED", "Job processing failed", { jobId, error: err.message, stack: err.stack });

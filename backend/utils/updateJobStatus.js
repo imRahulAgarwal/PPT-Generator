@@ -1,7 +1,7 @@
 import pool from "../configs/db.js";
 
 // Updates a job row — pass only the fields that need to change
-const updateJobStatus = async (jobId, { status, s3Key, errorMessage }) => {
+const updateJobStatus = async (jobId, { status, s3Key, errorMessage, servedFromCache, completedAt }) => {
 	const fields = [];
 	const values = [];
 	let idx = 1;
@@ -17,6 +17,15 @@ const updateJobStatus = async (jobId, { status, s3Key, errorMessage }) => {
 	if (errorMessage !== undefined) {
 		fields.push(`error_message = $${idx++}`);
 		values.push(errorMessage);
+	}
+
+	if (servedFromCache !== undefined) {
+		fields.push(`served_from_cache = $${idx++}`);
+		values.push(servedFromCache);
+	}
+	if (completedAt !== undefined) {
+		fields.push(`completed_at = $${idx++}`);
+		values.push(completedAt.toISOString());
 	}
 
 	fields.push(`updated_at = NOW() AT TIME ZONE 'UTC'`);

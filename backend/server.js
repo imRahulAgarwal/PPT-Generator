@@ -2,11 +2,10 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import jobRoutes from "./routes/jobRoutes.js";
+import metricsRoutes from "./routes/metricsRoutes.js";
 import morganMiddleware, { addTraceId } from "./middlewares/morganMiddleware.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
-
-// Start the worker so it begins processing queued jobs on server start
-import "./workers/pptWorker.js";
+import initDb from "./utils/initDb.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,8 +24,10 @@ app.use(addTraceId);
 app.use(morganMiddleware);
 
 app.use("/jobs", jobRoutes);
+app.use("/metrics", metricsRoutes);
 
 // Must be registered after all routes — catches errors passed via next(err)
 app.use(errorMiddleware);
 
+await initDb();
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

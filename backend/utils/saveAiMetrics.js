@@ -24,7 +24,16 @@ const saveAiMetrics = async (jobId, { modelUsed, inputTokens, outputTokens, tota
 		`INSERT INTO ai_metrics
       (job_id, model_used, input_tokens, output_tokens, total_tokens, approx_cost, started_at, responded_at, created_at)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW() AT TIME ZONE 'UTC')`,
-		[jobId, modelUsed, inputTokens, outputTokens, totalTokens, approxCost, startedAt, respondedAt],
+		[
+			jobId,
+			modelUsed,
+			inputTokens,
+			outputTokens,
+			totalTokens,
+			approxCost,
+			startedAt.toISOString(),
+			respondedAt.toISOString(),
+		],
 	);
 };
 

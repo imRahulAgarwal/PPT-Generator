@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { GoogleGenAI } from "@google/genai";
+import { buildPrompt, buildFallbackPrompt } from "../prompts/pptPrompts.js";
 
 const PRIMARY_MODEL = "gemini-3.1-pro-preview";
 const FALLBACK_MODEL = "gemini-2.5-flash";
@@ -10,43 +11,6 @@ const RETRY_DELAYS = [2000, 4000];
 class LLMService {
 	constructor() {
 		this.client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-	}
-
-	// Builds the prompt instructing Gemini to return structured JSON slide content
-	buildPrompt(topic, grade, numberOfSlides) {
-		return `You are an expert teacher creating a PowerPoint presentation.
-Topic: "${topic}"
-Grade: ${grade}
-Number of slides: ${numberOfSlides}
-
-Return ONLY a valid JSON object. No markdown, no explanation. Format:
-{
-  "title": "Presentation title",
-  "slides": [
-    {
-      "slideNumber": 1,
-      "title": "Slide title",
-      "bullets": ["Point 1", "Point 2", "Point 3"]
-    }
-  ]
-}
-
-Each slide must have 3-5 bullet points. Keep language appropriate for grade ${grade}.`;
-	}
-
-	// Stricter prompt used when falling back to a smaller model
-	buildFallbackPrompt(topic, grade, numberOfSlides) {
-		return `You are a teacher creating a PowerPoint presentation for grade ${grade} students.
-Topic: "${topic}"
-Slides needed: ${numberOfSlides}
-
-IMPORTANT: Respond with ONLY a raw JSON object. No markdown fences, no extra text.
-The JSON must strictly follow this schema:
-{
-  "title": string,
-  "slides": Array of { "slideNumber": number, "title": string, "bullets": string[] }
-}
-Each slide must have exactly 3 to 5 bullet points.`;
 	}
 
 	// Calls Gemini, parses the JSON response, and returns slide content with usage metrics
@@ -80,7 +44,7 @@ Each slide must have exactly 3 to 5 bullet points.`;
 
 	// Retries on 503, then switches to fallback model; returns slide content + metrics
 	async generateSlideContent(topic, grade, numberOfSlides) {
-		const prompt = this.buildPrompt(topic, grade, numberOfSlides);
+		const prompt = buildPrompt(topic, grade, numberOfSlides);
 
 		for (let attempt = 0; attempt < RETRY_DELAYS.length; attempt++) {
 			try {
@@ -94,7 +58,7 @@ Each slide must have exactly 3 to 5 bullet points.`;
 		}
 
 		// Primary retries exhausted — attempt fallback model with retries on 503
-		const fallbackPrompt = this.buildFallbackPrompt(topic, grade, numberOfSlides);
+		const fallbackPrompt = buildFallbackPrompt(topic, grade, numberOfSlides);
 		for (let attempt = 0; attempt < RETRY_DELAYS.length; attempt++) {
 			try {
 				return await this.callModel(FALLBACK_MODEL, fallbackPrompt);

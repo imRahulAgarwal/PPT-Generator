@@ -9,7 +9,6 @@ import { usePollJob } from "@/hooks/usePollJob";
 import JobStatusCard from "@/components/JobStatusCard";
 
 const GRADE_OPTIONS = [
-	"Kindergarten",
 	"Grade 1",
 	"Grade 2",
 	"Grade 3",

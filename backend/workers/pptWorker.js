@@ -57,7 +57,7 @@ const processJob = async (job) => {
 	logger.info("JOB_PROCESSING", "Job picked up by worker", { jobId });
 
 	try {
-		const cacheKey = `${topic} grade ${grade} ${numberOfSlides} slides`;
+		const cacheKey = `${topic} grade ${grade}`;
 		const embedding = await embeddingService.getEmbedding(cacheKey);
 
 		let isServedFromCache = false; // tracks whether this job was served from cache

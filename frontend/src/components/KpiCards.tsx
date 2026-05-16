@@ -66,7 +66,7 @@ export default function KpiCards() {
 	// Format helpers
 	const usd = (n: number) => `$${n.toFixed(4)}`;
 	const num = (n: number) => n.toLocaleString();
-	const ms = (n: number) => `${Math.round(n).toLocaleString()} ms`;
+	const secs = (n: number) => `${(n / 1000).toFixed(2)}s`;
 
 	const cards: KpiCardProps[] = [
 		{
@@ -96,7 +96,7 @@ export default function KpiCards() {
 		},
 		{
 			label: "Avg Generation Time",
-			value: ms(metrics.averageContentGenerationTimeMs),
+			value: secs(metrics.averageContentGenerationTimeMs),
 			description: "Mean time for the LLM to return slide content.",
 		},
 		{
@@ -112,10 +112,15 @@ export default function KpiCards() {
 	];
 
 	return (
-		<div className="grid grid-cols-2 gap-3">
-			{cards.map((card) => (
-				<KpiCard key={card.label} {...card} />
-			))}
-		</div>
+		<>
+			<div className="grid grid-cols-2 gap-3">
+				{cards.map((card) => (
+					<KpiCard key={card.label} {...card} />
+				))}
+			</div>
+			<p className="text-xs text-secondary mt-2">
+				* Costs are estimated based on current pricing from {"Google's"} official documentation.
+			</p>
+		</>
 	);
 }

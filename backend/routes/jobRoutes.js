@@ -4,8 +4,7 @@ import { createJobLimiter } from "../middlewares/rateLimiter.js";
 
 const jobRouter = express.Router();
 
-// jobRouter.post("/", createJobLimiter, job.createJob);
-jobRouter.post("/", job.createJob);
+jobRouter.post("/", createJobLimiter, job.createJob);
 jobRouter.get("/:id", job.getJob);
 
 export default jobRouter;

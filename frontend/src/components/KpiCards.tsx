@@ -39,13 +39,20 @@ export default function KpiCards() {
 	const [error, setError] = useState(false);
 
 	useEffect(() => {
-		fetch(`${BASE_URL}/metrics`)
-			.then((res) => {
-				if (!res.ok) throw new Error();
-				return res.json();
-			})
-			.then(setMetrics)
-			.catch(() => setError(true));
+		const fetchMetrics = () => {
+			fetch(`${BASE_URL}/metrics`)
+				.then((res) => {
+					if (!res.ok) throw new Error();
+					return res.json();
+				})
+				.then(setMetrics)
+				.catch(() => setError(true));
+		};
+
+		fetchMetrics();
+		const intervalId = setInterval(fetchMetrics, 60 * 1000);
+
+		return () => clearInterval(intervalId);
 	}, []);
 
 	if (error) {

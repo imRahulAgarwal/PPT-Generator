@@ -13,7 +13,11 @@ export function usePollJob(jobId: string | null) {
 	const [consecutiveErrors, setConsecutiveErrors] = useState(0);
 
 	useEffect(() => {
-		if (!jobId) return;
+		if (!jobId) {
+			setJob(null);
+			setPollError(null);
+			return;
+		}
 
 		const poll = async () => {
 			try {
